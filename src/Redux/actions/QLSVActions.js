@@ -1,4 +1,4 @@
-import {INSERT_SV, EDIT_SV,DELETE_SV,SEARCH_SV} from '../types/QLSVType';
+import {INSERT_SV, EDIT_SV, UPDATE_SV,DELETE_SV,SEARCH_SV} from '../types/QLSVType';
 
 export const insertSTUDENT = (payload) => {
     return {
@@ -20,6 +20,14 @@ export const editSTUDENT = (payload) => {
         payload
     }
 }
+
+export const updateSTUDENT = (payload) => {
+    return {
+        type: UPDATE_SV,
+        payload
+    }
+}
+
 
 export const searchSTUDENT = (payload) => {
     return {

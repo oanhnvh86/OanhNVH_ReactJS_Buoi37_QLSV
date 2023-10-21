@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { flushSync } from "react-dom";
-import { insertSTUDENT } from '../Redux/actions/QLSVActions'
+import { editSTUDENT, insertSTUDENT, updateSTUDENT } from '../Redux/actions/QLSVActions'
 
 class FormSVComponent extends Component {
     state = {
@@ -91,15 +91,14 @@ class FormSVComponent extends Component {
                     // 3. Check điều kiện ID là duy nhất.
                     // product.id: string | number
                     // value[prop]: string | number
-                      const isExist = this.props.listStudents.find(
+                    const isExist = this.props.listStudents.find(
                         (sinhvien) => +sinhvien.maSV === Number(value[prop])
-                      );
-                    //   const isNotEdit = !this.props.productEdit;
+                    );
+                    const isNotEdit = !this.props.sinhvienEdit;
 
-                    //   if (isExist && isNotEdit) {
-                    if (isExist) {
+                    if (isExist && isNotEdit) {
                         newError[prop] = "Id đã tồn tại.";
-                      }
+                    }
 
                     // 2. phải là số
                     const REGEX_NUMBER = /^\d+$/;
@@ -192,7 +191,7 @@ class FormSVComponent extends Component {
 
         //Truosc khi submit, thì phải validate all
         const newError = this.handleValidate();
-        
+
 
         // kiểm tra nếu có 1 message error nào thì không cho submit
         const ready = Object.values(newError).every((i) => i.length === 0);
@@ -200,7 +199,7 @@ class FormSVComponent extends Component {
             return;
 
         //KHi nhấn submit, thì gửi input data qua list Sinhvien => đưa dữ liệu này lên redux
-        this.props.insertSV(this.state.value);
+        this.props.sinhvienEdit ? this.props.updateSV(this.state.value) : this.props.insertSV(this.state.value);
         //sau khi gởi data lên redux, refresh lại data của state => refresh input value
         this.setState({
             value: {
@@ -212,6 +211,26 @@ class FormSVComponent extends Component {
 
         });
     };
+
+    static getDerivedStateFromProps(newProps, currentState) {
+        console.log({
+            newProps,
+            currentState,
+            // preProps: this.props,
+        });
+
+        //chỉ cập nhật state khi sinhvienEdit có giá trị
+        if (newProps.sinhvienEdit !==null){
+            //Lấy giá trị props.sinhvienEdit cập nhật 1 lần trước đó rồi,
+            //Lần sau chúng ta ko cần cập nhật lại state nữa
+            if (newProps.sinhvienEdit.maSV !== currentState.value.maSV)
+                return {
+                    value: newProps.sinhvienEdit,
+                }
+        }
+        // ko cập nhật lại state
+        return null;
+    }
 
     //!Render to UI
     render() {
@@ -236,6 +255,7 @@ class FormSVComponent extends Component {
                                 value={this.state.value.maSV} // đưa giá trị vào ô input
                                 onChange={this.handleChange} // lấy giá trị từ input ra
                                 onBlur={this.handleBlur} //sự kiện load focus
+                                disabled={this.props.sinhvienEdit} //ko cho chỉnh sửa nếu edit sinh vient
                             // // Không cho chỉnh sửa nên nhấn edit sản phẩm
                             // disabled={this.props.productEdit}
                             />
@@ -305,8 +325,8 @@ class FormSVComponent extends Component {
                     </div>
                 </div>
                 <button type="submit" className="btn btn-primary">
-                    {/* {this.props.productEdit ? "Update" : "Submit"} */}
-                    Thêm Sinh Viên
+                    {this.props.sinhvienEdit ? "Update" : "Submit"}
+                    {/* Thêm Sinh Viên */}
                 </button>
             </form>
         )
@@ -317,6 +337,7 @@ class FormSVComponent extends Component {
 const mapStateToProps = (rootReducer) => {
     return {
         listStudents: rootReducer.QLSVReducer.listStudents,
+        sinhvienEdit: rootReducer.QLSVReducer.sinhvienEdit,
     }
 }
 //push data to Redux
@@ -324,6 +345,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         insertSV: (sinhvien) => {
             dispatch(insertSTUDENT(sinhvien));
+        },
+
+        updateSV: (sinhvien) => {
+            dispatch(updateSTUDENT(sinhvien));
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { deleteSTUDENT } from '../Redux/actions/QLSVActions';
+import { deleteSTUDENT, editSTUDENT } from '../Redux/actions/QLSVActions';
 
 
 class ListSVComponent extends Component {
@@ -14,7 +14,11 @@ class ListSVComponent extends Component {
                     <td>{sinhvien.soDT}</td>
                     <td>{sinhvien.email}</td>
                     <td>
-                        <button>Edit</button>
+                        <button
+                        onClick={()=>{
+                            this.props.dispatch(editSTUDENT(sinhvien));
+                        }}
+                        >Edit</button>
                         <button className='ml-4'
                         onClick={()=>{
                             this.props.dispatch(deleteSTUDENT(sinhvien.maSV));
