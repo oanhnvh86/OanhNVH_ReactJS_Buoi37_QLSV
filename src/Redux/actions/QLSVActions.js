@@ -7,17 +7,16 @@ export const insertSTUDENT = (payload) => {
     }
 }
 
-
-export const editSTUDENT = (payload) => {
+export const deleteSTUDENT = (payload) => {
     return {
-        type: EDIT_SV,
+        type: DELETE_SV,
         payload
     }
 }
 
-export const deleteSTUDENT = (payload) => {
+export const editSTUDENT = (payload) => {
     return {
-        type: DELETE_SV,
+        type: EDIT_SV,
         payload
     }
 }

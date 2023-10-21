@@ -91,14 +91,15 @@ class FormSVComponent extends Component {
                     // 3. Check điều kiện ID là duy nhất.
                     // product.id: string | number
                     // value[prop]: string | number
-                    //   const isExist = this.props.listStudents.find(
-                    //     (sinhvien) => +sinhvien.maSV === Number(value[prop])
-                    //   );
+                      const isExist = this.props.listStudents.find(
+                        (sinhvien) => +sinhvien.maSV === Number(value[prop])
+                      );
                     //   const isNotEdit = !this.props.productEdit;
 
                     //   if (isExist && isNotEdit) {
-                    //     newError[prop] = "Id đã tồn tại.";
-                    //   }
+                    if (isExist) {
+                        newError[prop] = "Id đã tồn tại.";
+                      }
 
                     // 2. phải là số
                     const REGEX_NUMBER = /^\d+$/;
@@ -232,12 +233,9 @@ class FormSVComponent extends Component {
                                 id="maSV"
                                 name="maSV"
                                 className="form-control"
-                                // đưa giá trị vào ô input
-                                value={this.state.value.maSV}
-                                // lấy giá trị từ input ra
-                                onChange={this.handleChange}
-                                //sự kiện load focus
-                                onBlur={this.handleBlur}
+                                value={this.state.value.maSV} // đưa giá trị vào ô input
+                                onChange={this.handleChange} // lấy giá trị từ input ra
+                                onBlur={this.handleBlur} //sự kiện load focus
                             // // Không cho chỉnh sửa nên nhấn edit sản phẩm
                             // disabled={this.props.productEdit}
                             />
