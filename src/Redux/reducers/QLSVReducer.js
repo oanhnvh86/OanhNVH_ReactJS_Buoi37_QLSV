@@ -12,13 +12,14 @@ const stateDefault = {
 const QLSVReducer = (state = stateDefault, action) => {
     switch (action.type) {
         case INSERT_SV: {
-            console.log('action insert:', action);
-            let listStudentsUpdate = [...state.listStudents];
+            console.log('action insert:', action.payload);
+            const listStudentsUpdate = [...state.listStudents];
+            listStudentsUpdate.push(action.payload);
             state.listStudents = listStudentsUpdate;
            
             return { ...state }
         }
-        case EDIT_SV: {
+        case DELETE_SV: {
             // let danhSachGheDangDatUpdate = [...state.danhSachGheDangDat];
             // let index = danhSachGheDangDatUpdate.findIndex(gheDangDat => gheDangDat.soGhe === action.soGhe);
             // if (index !== -1) { //ghế đang đặt đã có trong mảng khi người dùng click => remove đi
@@ -27,7 +28,7 @@ const QLSVReducer = (state = stateDefault, action) => {
             // state.danhSachGheDangDat = danhSachGheDangDatUpdate;
             return { ...state }
         }
-        case DELETE_SV: {
+        case EDIT_SV: {
             // let danhSachGheDangDatUpdate = [...state.danhSachGheDangDat];
             // let index = danhSachGheDangDatUpdate.findIndex(gheDangDat => gheDangDat.soGhe === action.soGhe);
             // if (index !== -1) { //ghế đang đặt đã có trong mảng khi người dùng click => remove đi
